@@ -1,6 +1,7 @@
 ﻿using eCommerce.SharedLibrary.Responses;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace eCommerce.SharedLibrary.Interface
@@ -10,9 +11,9 @@ namespace eCommerce.SharedLibrary.Interface
     {
         Task<Response> CreateAsync(T entity);
         Task<Response> UpdateAsync(T entity);
-        Task<Response> DeleteAsync(int id);
+        Task<Response> DeleteAsync(T entity);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> FindByIdAsync(int id);
-        Task<T> GetByAsync(Func<T, bool> predicate);
+        Task<T> GetByAsync(Expression<Func<T, bool>> predicate);
     }
 }
