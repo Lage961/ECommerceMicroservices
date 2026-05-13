@@ -1,1 +1,6 @@
-<Solution />
+<Solution>
+  <Project Path="ProductApi.Application/ProductApi.Application.csproj" Id="3380ae7c-5a03-462d-a7ce-0d79f742bf9b" />
+  <Project Path="ProductApi.Domain/ProductApi.Domain.csproj" Id="a8455fed-d4d9-46c2-a900-c6ef19b3b261" />
+  <Project Path="ProductApi.Infrastructure/ProductApi.Infrastructure.csproj" Id="f4d58d5b-4385-487a-8562-9db73f01eaec" />
+  <Project Path="ProductApi.Presentation/ProductApi.Presentation.csproj" Id="f45a4f9d-4fd5-4410-a2ec-d849da765ab2" />
+</Solution>
