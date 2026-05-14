@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 
 namespace ProductApi.Infrastructure.Repositories
 {
+    
     internal class ProductRepository(ProductDbContext context) : IProduct
     {
         public async Task<Response> CreateAsync(Product entity)
