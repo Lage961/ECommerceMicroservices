@@ -14,7 +14,7 @@ namespace ProductApi.Infrastructure.DependencyInjection
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
             //Add authentication Connectivity
-            SharedServiceContainer.AddSharedServices<ProductDbContext>(services, configuration, configuration["MySerilog:FineName"]!);
+            SharedServiceContainer.AddSharedServices<ProductDbContext>(services, configuration, configuration["MySerilog:FileName"]!);
             //Add authentication Scheme
             services.AddScoped<IProduct, ProductRepository>();
 
