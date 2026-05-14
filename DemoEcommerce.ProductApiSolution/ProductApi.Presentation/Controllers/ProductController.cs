@@ -11,99 +11,97 @@ namespace ProductApi.Presentation.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProduct _productInterface;
+        private readonly IProduct productInterface;
 
         public ProductController(IProduct productInterface)
         {
-            this._productInterface = productInterface;
+            this.productInterface = productInterface;
         }
 
-        public class ProductsController(IProduct productInterface) : ControllerBase
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
         {
-            [HttpGet]
-            public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
+
+            // Get all products from the database
+            var products = await productInterface.GetAllAsync();
+
+            if (!products.Any())
             {
-
-                // Get all products from the database
-                var products = await productInterface.GetAllAsync();
-
-                if (!products.Any())
-                {
-                    return NotFound("No products found.");
-                }
-
-                // Convert entities to DTOs
-                var (_, list) = ProductConversion.ToDTO(null!, products);
-
-                return list!.Any() ? Ok(list) : NotFound("No products found.");
+                return NotFound("No products found.");
             }
 
-            [HttpGet("{id:int}")]
-            public async Task<ActionResult<ProductDTO>> GetProductById(int id)
+            // Convert entities to DTOs
+            var (_, list) = ProductConversion.ToDTO(null!, products);
+
+            return list!.Any() ? Ok(list) : NotFound("No products found.");
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ProductDTO>> GetProductById(int id)
+        {
+            // Get Single product from the database by ID
+            var product = await productInterface.FindByIdAsync(id);
+
+            if (product is null)
             {
-                // Get Single product from the database by ID
-                var product = await productInterface.FindByIdAsync(id);
-
-                if (product is null)
-                {
-                    return NotFound($"Product with ID {id} not found.");
-                }
-
-                // Convert entity to DTO
-                var (productDTO, _) = ProductConversion.ToDTO(product, null!);
-
-                if (productDTO is null)
-                {
-                    return Ok(productDTO);
-                }
-                else
-                {
-                    return NotFound($"Product with ID {id} not found.");
-                }
-
+                return NotFound($"Product with ID {id} not found.");
             }
 
-            [HttpPost]
-            public async Task<ActionResult<Response>> CreateProduct(ProductDTO productDTO)
+            // Convert entity to DTO
+            var (productDTO, _) = ProductConversion.ToDTO(product, null!);
+
+            if (productDTO is null)
             {
-                // Check model state is all data annotations are valid
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                // Convert DTO to entity
-                var getEntity = ProductConversion.ToEntity(productDTO);
-                var response = await productInterface.CreateAsync(getEntity);
-
-                return response.Success ? Ok(response) : BadRequest(response);
-
+                return Ok(productDTO);
+            }
+            else
+            {
+                return NotFound($"Product with ID {id} not found.");
             }
 
-            [HttpPut]
-            public async Task<ActionResult<Response>> UpdateProduct(ProductDTO productDTO)
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Response>> CreateProduct(ProductDTO productDTO)
+        {
+            // Check model state is all data annotations are valid
+            if (!ModelState.IsValid)
             {
-                // Check model state is all data annotations are valid
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                // Convert DTO to entity
-                var getEntity = ProductConversion.ToEntity(productDTO);
-                var response = await productInterface.UpdateAsync(getEntity);
-                return response.Success ? Ok(response) : BadRequest(response);
-
+                return BadRequest(ModelState);
             }
 
-            [HttpDelete]
-            public async Task<ActionResult<Response>> DeleteProduct(ProductDTO product)
+            // Convert DTO to entity
+            var getEntity = ProductConversion.ToEntity(productDTO);
+            var response = await productInterface.CreateAsync(getEntity);
+
+            return response.Success ? Ok(response) : BadRequest(response);
+
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Response>> UpdateProduct(ProductDTO productDTO)
+        {
+            // Check model state is all data annotations are valid
+            if (!ModelState.IsValid)
             {
-                // convert DTO to entity
-                var getEntity = ProductConversion.ToEntity(product);
-                var response = await productInterface.DeleteAsync(getEntity);
-                return response.Success ? Ok(response) : BadRequest(response);
+                return BadRequest(ModelState);
             }
+
+            // Convert DTO to entity
+            var getEntity = ProductConversion.ToEntity(productDTO);
+            var response = await productInterface.UpdateAsync(getEntity);
+            return response.Success ? Ok(response) : BadRequest(response);
+
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<Response>> DeleteProduct(ProductDTO product)
+        {
+            // convert DTO to entity
+            var getEntity = ProductConversion.ToEntity(product);
+            var response = await productInterface.DeleteAsync(getEntity);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
     }
 }
+
