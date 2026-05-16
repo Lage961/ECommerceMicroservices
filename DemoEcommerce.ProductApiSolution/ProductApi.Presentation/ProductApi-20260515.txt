@@ -1,0 +1,2 @@
+2026-05-15 19:50:22.735 -04:00 [INF] Headers are read-only, response has already started.
+2026-05-15 19:50:22.831 -04:00 [WRN] Headers are read-only, response has already started.

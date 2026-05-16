@@ -18,7 +18,7 @@ namespace ProductApi.Presentation.Controllers
             this.productInterface = productInterface;
         }
 
-        [HttpGet]
+        [HttpGet ("Get Product")]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
         {
 
@@ -36,7 +36,7 @@ namespace ProductApi.Presentation.Controllers
             return list!.Any() ? Ok(list) : NotFound("No products found.");
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("Get Product By Id/{id:int}")]
         public async Task<ActionResult<ProductDTO>> GetProductById(int id)
         {
             // Get Single product from the database by ID
@@ -61,7 +61,7 @@ namespace ProductApi.Presentation.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost ("Create Product")]
         public async Task<ActionResult<Response>> CreateProduct(ProductDTO productDTO)
         {
             // Check model state is all data annotations are valid
@@ -78,7 +78,7 @@ namespace ProductApi.Presentation.Controllers
 
         }
 
-        [HttpPut]
+        [HttpPut ("Update Product")]
         public async Task<ActionResult<Response>> UpdateProduct(ProductDTO productDTO)
         {
             // Check model state is all data annotations are valid
@@ -94,7 +94,7 @@ namespace ProductApi.Presentation.Controllers
 
         }
 
-        [HttpDelete]
+        [HttpDelete("Remove Product")]
         public async Task<ActionResult<Response>> DeleteProduct(ProductDTO product)
         {
             // convert DTO to entity
